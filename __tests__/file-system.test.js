@@ -4,6 +4,7 @@ const { mkdirp, writeJSON } = require('../lib/file-systems');
 jest.mock('fs', () => ({
   promises: {
     mkdir: jest.fn(() => Promise.resolve('My File Path')),
+    writeJSON: jest.fn(() => Promise.resolve('{ name: travis }'))
   }
 }));
 describe('mkdirp', () => {
@@ -19,9 +20,11 @@ describe('mkdirp', () => {
 });
 describe('writeJSON', () =>{
   it('write an object to a file', () => {
-    return writeJSON()
+    return writeJSON('{ name: travis }')
       .then(() => {
-        expect(fs.writeJSON);
+        expect(fs.writeJSON).toHaveBeenCalledWith('{ name: travis }', {
+          recursive: true
+        });
       });
   });
 });
