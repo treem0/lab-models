@@ -1,5 +1,5 @@
 const fs = require('fs').promises;
-const { mkdirp, writeJSON, readJSON, readDirectoryJSON } = require('../lib/file-systems');
+const { mkdirp, writeJSON, readJSON, readDirectoryJSON, updateJSON } = require('../lib/file-systems');
 
 jest.mock('fs', () => ({
   promises: {
@@ -49,6 +49,15 @@ describe('readDirectoryJSON', () => {
           { name: 'travis' },
           { name: 'travis' }
         ]);
+      });
+  });
+});
+describe('updateJSON', () => {
+  it('update a files JSON', () => {
+    return updateJSON('./this/is/my/cool/spot', { age: 5 })
+      .then(updateItem => {
+        expect(fs.readFile).toHaveBeenLastCalledWith('./this/is/my/cool/spot', 'utf8');
+        expect(updateItem).toEqual({ name: 'travis', age: 5 });
       });
   });
 });
